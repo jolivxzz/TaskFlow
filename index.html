@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10131c">
+  <title>TaskFlow — Organize seu dia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="TaskFlow início">
+        <span class="brand-mark">✓</span><span>task<span class="brand-accent">flow</span></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-menu" aria-label="Navegação principal">
+        <a class="nav-link active" href="#dashboard"><span>▦</span> Visão geral</a>
+        <a class="nav-link" href="#board"><span>▤</span> Meu quadro</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip">
+          <span class="tip-icon">✦</span>
+          <strong>Um passo de cada vez.</strong>
+          <p>Organize suas tarefas e transforme planos em progresso.</p>
+        </div>
+        <div class="profile">
+          <div class="avatar">J</div>
+          <div><strong>Meu espaço</strong><small>Plano pessoal</small></div>
+          <span class="profile-dots">•••</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="dashboard">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="today-label">SEU ESPAÇO DE TRABALHO</p>
+          <h1>Visão geral <span class="wave">✦</span></h1>
+          <p class="subtitle">Pequenos avanços também são grandes conquistas.</p>
+        </div>
+        <button class="primary-btn" id="open-task-modal"><span>＋</span> Nova tarefa</button>
+      </header>
+
+      <section class="stats-grid" aria-label="Indicadores">
+        <article class="stat-card stat-total"><div class="stat-top"><span>Total de tarefas</span><span class="stat-icon">▦</span></div><strong id="total-count">0</strong><small>tarefas cadastradas</small></article>
+        <article class="stat-card"><div class="stat-top"><span>A fazer</span><span class="stat-icon amber">◷</span></div><strong id="todo-count">0</strong><small>aguardando início</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Em andamento</span><span class="stat-icon blue">↗</span></div><strong id="doing-count">0</strong><small>em progresso</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Concluídas</span><span class="stat-icon green">✓</span></div><strong id="done-count">0</strong><small>missões finalizadas</small></article>
+      </section>
+
+      <section class="board-section" id="board">
+        <div class="board-heading">
+          <div><h2>Meu quadro</h2><p>Acompanhe cada tarefa do começo ao fim.</p></div>
+          <div class="filters">
+            <label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Buscar tarefa..." aria-label="Pesquisar pelo título"></label>
+            <select id="priority-filter" aria-label="Filtrar por prioridade"><option value="all">Todas prioridades</option><option value="alta">Alta prioridade</option><option value="media">Média prioridade</option><option value="baixa">Baixa prioridade</option></select>
+            <select id="status-filter" aria-label="Filtrar por status"><option value="all">Todos os status</option><option value="todo">A Fazer</option><option value="doing">Em Andamento</option><option value="done">Concluídas</option></select>
+            <button class="clear-btn" id="clear-filters" title="Limpar filtros">Limpar</button>
+          </div>
+        </div>
+
+        <div class="kanban-board">
+          <section class="kanban-column" data-status="todo">
+            <div class="column-heading"><div><span class="column-dot todo-dot"></span><h3>A Fazer</h3><span class="column-count" id="todo-column-count">0</span></div><button class="add-column-btn" data-add="todo" aria-label="Adicionar tarefa a fazer">＋</button></div>
+            <div class="task-list" id="todo-list"></div>
+            <button class="add-task-link" data-add="todo">＋ Adicionar tarefa</button>
+          </section>
+          <section class="kanban-column" data-status="doing">
+            <div class="column-heading"><div><span class="column-dot doing-dot"></span><h3>Em Andamento</h3><span class="column-count" id="doing-column-count">0</span></div><button class="add-column-btn" data-add="doing" aria-label="Adicionar tarefa em andamento">＋</button></div>
+            <div class="task-list" id="doing-list"></div>
+            <button class="add-task-link" data-add="doing">＋ Adicionar tarefa</button>
+          </section>
+          <section class="kanban-column" data-status="done">
+            <div class="column-heading"><div><span class="column-dot done-dot"></span><h3>Concluídas</h3><span class="column-count" id="done-column-count">0</span></div><button class="add-column-btn" data-add="done" aria-label="Adicionar tarefa concluída">＋</button></div>
+            <div class="task-list" id="done-list"></div>
+            <button class="add-task-link" data-add="done">＋ Adicionar tarefa</button>
+          </section>
+        </div>
+        <p class="board-footer"><span class="footer-dot"></span> Seus dados ficam salvos neste navegador.</p>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="task-dialog" class="task-dialog">
+    <form id="task-form">
+      <div class="modal-header"><div><p class="eyebrow">TASKFLOW / TAREFAS</p><h2 id="modal-title">Criar tarefa</h2></div><button type="button" class="close-btn" id="close-modal" aria-label="Fechar">×</button></div>
+      <label class="field-label" for="task-title">Título <span>*</span></label>
+      <input id="task-title" name="title" maxlength="80" placeholder="Ex.: Finalizar trabalho de história" required>
+      <label class="field-label" for="task-description">Descrição</label>
+      <textarea id="task-description" name="description" rows="3" maxlength="300" placeholder="Adicione alguns detalhes sobre essa tarefa..."></textarea>
+      <div class="form-row">
+        <div><label class="field-label" for="task-priority">Prioridade</label><select id="task-priority" name="priority"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select></div>
+        <div><label class="field-label" for="task-due">Prazo</label><input id="task-due" name="due" type="date"></div>
+      </div>
+      <div class="form-row"><div><label class="field-label" for="task-status">Status</label><select id="task-status" name="status"><option value="todo">A Fazer</option><option value="doing">Em Andamento</option><option value="done">Concluída</option></select></div><div class="form-note">Você pode alterar o status depois pelo cartão.</div></div>
+      <div class="modal-actions"><button type="button" class="secondary-btn" id="cancel-modal">Cancelar</button><button type="submit" class="primary-btn">Salvar tarefa</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
